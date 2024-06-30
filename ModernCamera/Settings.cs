@@ -1,10 +1,12 @@
-﻿using ModernCamera.Enums;
-using Silkworm.API;
-using Silkworm.Core.KeyBinding;
-using Silkworm.Core.Options;
+﻿using Bloodstone.API;
+using ModernCamera.API;
+using ModernCamera.Enums;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Keybinding = ModernCamera.API.Keybinding;
+using System.Data.SQLite;
+using ModernCamera.Patches;
 
 namespace ModernCamera
 {
@@ -85,13 +87,18 @@ namespace ModernCamera
 
         internal static void Init()
         {
+            //string connectionString = "Data Source=mydatabase.db;";
+            //var connection = new SQLiteConnection(connectionString);
+            //string query = "CREATE TABLE person (id INTEGER PRIMARY KEY, name TEXT)";
+            //var command = new SQLiteCommand(query, connection);
+            //command.ExecuteNonQuery();
             SetupOptions();
             SetupKeybinds();
         }
 
         internal static void AddEnabledListener(OnChange<bool> action) => EnabledOption.AddListener(action);
         internal static void AddFieldOfViewListener(OnChange<float> action) => FieldOfViewOption.AddListener(action);
-        internal static void AddHideUIListener(KeyEvent action) => HideUIKeybind.AddKeyDownListener(action);
+        internal static void AddHideUIListener(KeyEvent action) => HideUIKeybind.AddKeyPressedListener(action);
 
         private static void SetupOptions()
         {
@@ -162,20 +169,30 @@ namespace ModernCamera
         {
             var category = KeybindingsManager.AddCategory("Modern Camera");
 
-            EnabledKeybind = category.AddKeyBinding("moderncamera.enabled", "Enabled");
-            EnabledKeybind.AddKeyDownListener(() => EnabledOption.SetValue(!Enabled));
+            EnabledKeybind = category.AddKeyBinding("moderncamera.enabled", "ModernCamera", "Toggle Modern Camera", KeyCode.Comma);
+            EnabledKeybind.AddKeyPressedListener(() =>
+            {
+                Plugin.Logger.LogInfo(category.Name + " Enabled: " + !Enabled);
+                EnabledOption.SetValue(!Enabled);
+            });
 
-            ActionModeKeybind = category.AddKeyBinding("moderncamera.actionmode", "Action Mode");
-            ActionModeKeybind.AddKeyDownListener(() =>
+            ActionModeKeybind = category.AddKeyBinding("moderncamera.actionmode", "ModernCamera", "Toggle Action Mode", KeyCode.Period);
+            ActionModeKeybind.AddKeyPressedListener(() =>
             {
                 if (Settings.Enabled && !ModernCameraState.IsFirstPerson)
                 {
+                    Plugin.Logger.LogInfo($"Start: Action Mode: {ModernCameraState.IsActionMode}; Mouse Locked: {ModernCameraState.IsMouseLocked}; Wheel Visible: {ActionWheelSystem_Patch.WheelVisible}; IsMenuOpen: {ModernCameraState.IsMenuOpen}");
                     ModernCameraState.IsMouseLocked = !ModernCameraState.IsMouseLocked;
                     ModernCameraState.IsActionMode = !ModernCameraState.IsActionMode;
+                    if (ModernCameraState.IsMenuOpen)
+                        ModernCameraState.IsMenuOpen = false;
+                    if (ActionWheelSystem_Patch.WheelVisible)
+                        ActionWheelSystem_Patch.WheelVisible = false;
+                    Plugin.Logger.LogInfo($"End: Action Mode: {ModernCameraState.IsActionMode}; Mouse Locked: {ModernCameraState.IsMouseLocked}; Wheel Visible: {ActionWheelSystem_Patch.WheelVisible}; IsMenuOpen: {ModernCameraState.IsMenuOpen}");
                 }
             });
 
-            HideUIKeybind = category.AddKeyBinding("moderncamera.hideui", "Hide UI");
-        }
+            HideUIKeybind = category.AddKeyBinding("moderncamera.hideui", "ModernCamera", "Hide UI", KeyCode.Slash);
+        }        
     }
 }

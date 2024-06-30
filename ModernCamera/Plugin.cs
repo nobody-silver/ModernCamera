@@ -2,20 +2,21 @@
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using ModernCamera.Hooks;
-using Silkworm.Utils;
+using BepInEx.Logging;
 
 namespace ModernCamera;
 
 [BepInProcess("VRising.exe")]
-[BepInDependency("iZastic.Silkworm")]
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class Plugin : BasePlugin
 {
     private static Harmony Harmony;
 
+    public static ManualLogSource Logger;
+
     public override void Load()
     {
-        LogUtils.Init(Log);
+        Logger = Log;
         Settings.Init();
 
         AddComponent<ModernCamera>();
@@ -25,7 +26,7 @@ public class Plugin : BasePlugin
         Harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         Harmony.PatchAll();
 
-        LogUtils.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} v{PluginInfo.PLUGIN_VERSION} is loaded!");
+        Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} v{PluginInfo.PLUGIN_VERSION} is loaded!");
     }
 
     public override bool Unload()

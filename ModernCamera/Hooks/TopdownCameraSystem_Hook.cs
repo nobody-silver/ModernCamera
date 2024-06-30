@@ -1,6 +1,6 @@
 ﻿using BepInEx.Unity.IL2CPP.Hook;
+using ModernCamera.API;
 using ProjectM;
-using Silkworm.Utils;
 using System;
 using System.Runtime.InteropServices;
 
