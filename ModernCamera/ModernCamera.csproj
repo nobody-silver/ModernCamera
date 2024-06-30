@@ -23,4 +23,9 @@
 
   <Import Project="$(MSBuildProjectDirectory)\PluginInfo.props" />
   <Import Project="$(MSBuildProjectDirectory)\Manifest.props" />
+
+  <Target Name="CopyPackageFiles" AfterTargets="Build">
+    <Copy ContinueOnError="true" SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)Silkworm.dll;$(IntermediateOutputPath)manifest.json;$(ProjectDir)..\icon.png;$(ProjectDir)..\README.md" DestinationFolder="$(ProjectDir)..\package" />
+    <Message Text="Copied build files to package directory" Importance="High" />
+  </Target>
 </Project>
