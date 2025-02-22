@@ -10,12 +10,15 @@
     <Authors>VRising</Authors>
     <PackageId>$(Authors).$(AssemblyName)</PackageId>
     <PackageProjectUrl>https://github.com/v-rising/ModernCamera</PackageProjectUrl>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="VRising.Unhollowed.Client" Version="1.0.2.794360001" />
-    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
-    <ProjectReference Include="..\..\Silkworm\Silkworm\Silkworm.csproj" />
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.691" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.Core" Version="6.0.0-be.691" IncludeAssets="compile" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" PrivateAssets="none" />
+    <PackageReference Include="VRising.Unhollowed.Client" Version="1.0.*" />
+    <PackageReference Include="Vrising.Bloodstone" Version="0.2.*" />
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectDirectory)\PluginInfo.props" />

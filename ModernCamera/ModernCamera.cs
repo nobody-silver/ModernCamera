@@ -4,7 +4,6 @@ using ModernCamera.Utils;
 using ProjectM;
 using ProjectM.Sequencer;
 using ProjectM.UI;
-using Silkworm.Utils;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -137,7 +136,7 @@ public class ModernCamera : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogUtils.LogDebugError(ex);
+            Plugin.Logger.LogError(ex);
         }
     }
 
@@ -200,7 +199,7 @@ public class ModernCamera : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogUtils.LogDebugError(ex);
+            Plugin.Logger.LogError(ex);
         }
     }
 
@@ -258,7 +257,7 @@ public class ModernCamera : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogUtils.LogDebugError(ex);
+            Plugin.Logger.LogError(ex);
         }
     }
 }

@@ -1,26 +1,44 @@
-﻿using HarmonyLib;
+﻿using BepInEx.Unity.IL2CPP.UnityEngine;
+using HarmonyLib;
 using ProjectM.UI;
+using UnityEngine;
 
 namespace ModernCamera.Patches;
 
 [HarmonyPatch]
 internal static class ActionWheelSystem_Patch
 {
-    private static bool WheelVisible;
+    internal static bool WheelVisible;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(ActionWheelSystem), nameof(ActionWheelSystem.OnUpdate))]
     private static void OnUpdate(ActionWheelSystem __instance)
     {
-        if (!WheelVisible && (__instance._CurrentActiveWheel.IsVisible() || __instance._EmotesWheel.IsVisible()))
+        if (__instance == null)
         {
-            ModernCameraState.IsMenuOpen = true;
-            WheelVisible = true;
+            return;
         }
-        else if (WheelVisible && !__instance._CurrentActiveWheel.IsVisible() && !__instance._EmotesWheel.IsVisible())
+
+        if (WheelVisible)
         {
-            ModernCameraState.IsMenuOpen = false;
-            WheelVisible = false;
+            if (__instance._CurrentActiveWheel != null && !__instance._CurrentActiveWheel.IsVisible())
+            {
+                Plugin.Logger.LogInfo("No wheel visible");
+                ModernCameraState.IsMenuOpen = false;
+                WheelVisible = false;
+            }
+            else if (__instance._CurrentActiveWheel == null)
+            {
+                Plugin.Logger.LogInfo("Wheel is null");
+                ModernCameraState.IsMenuOpen = false;
+                WheelVisible = false;
+            }
+        }
+        else if (__instance._CurrentActiveWheel != null && __instance._CurrentActiveWheel.IsVisible())
+        {
+            Plugin.Logger.LogInfo("CurrentActiveWheel is visible");
+            WheelVisible = true;
+            ModernCameraState.IsMenuOpen = true;
         }
     }
 }
