@@ -169,14 +169,14 @@ namespace ModernCamera
         {
             var category = KeybindingsManager.AddCategory("Modern Camera");
 
-            EnabledKeybind = category.AddKeyBinding("moderncamera.enabled", "ModernCamera", "Toggle Modern Camera", KeyCode.Comma);
+            EnabledKeybind = category.AddKeyBinding("moderncamera.enabled", "ModernCamera", "Toggle Modern Camera", KeyCode.PageUp);
             EnabledKeybind.AddKeyPressedListener(() =>
             {
                 Plugin.Logger.LogInfo(category.Name + " Enabled: " + !Enabled);
                 EnabledOption.SetValue(!Enabled);
             });
 
-            ActionModeKeybind = category.AddKeyBinding("moderncamera.actionmode", "ModernCamera", "Toggle Action Mode", KeyCode.Period);
+            ActionModeKeybind = category.AddKeyBinding("moderncamera.actionmode", "ModernCamera", "Toggle Action Mode", KeyCode.PageDown);
             ActionModeKeybind.AddKeyPressedListener(() =>
             {
                 if (Settings.Enabled && !ModernCameraState.IsFirstPerson)
